@@ -1,6 +1,4 @@
 
-#Used this video to help write this code:  https://www.youtube.com/watch?v=jQjjqEjZK58
-
 from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
