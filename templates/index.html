@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="eng">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>My To-Do List Two
+		</title>
+	</head>
+
+	<body>
+		<h1>My To-Do List Again</h1>
+
+		<div id="todo-container">
+			<form id="todo-form">
+				<input type="text" id="todo-input" placeholder="Enter a task..." required>
+				</input>
+				<button type="submit">Add
+				</button>
+			</form>
+			<ul id="todo-list">
+			</ul>
+		</div>
+
+		<script>
+			// Creating constants with values equl to thier coreponding values by id
+			const form = document.getElementById("todo-form");
+			const input = document.getElementById("todo-input");
+			const list = document.getElementById("todo-list");
+
+			form.addEventListener("submit", function (event) {
+				event.preventDefault();
+				const task = input.value.trim();  // Trims off the extra spaces from the user's input and stores it within the constant "task"
+				if (task !== "") {
+					const li = document.createElement("li");  // Creates a new list item from the website's document
+// Delete Button <
+					const span = document.createElement("span");  // Create new constant "span" to delete contents without deleteing "li" or "deleteBtn"
+					span.textContent = task;  // Sets "span" to the contents of "task"
+
+					const deleteBtn = document.createElement("button");  // Creates new constant delete button variable
+					deleteBtn.textContent = "Delete";  // Sets the content of the button to "Delete" for display
+					deleteBtn.onclick = () => {  // Function to delete list item (li) from list
+						list.removeChild(li);
+					};
+
+//					li.textContent = task;  // Assigning new list item to trimmed input "task"
+					li.appendChild(span);  // Adds span to the end of li
+					li.appendChild(deleteBtn);  // Adds deleteBtn to the end of li
+					list.appendChild(li);  // Adds "li" to the end of "list" (First In, First Out)
+// Delete Button >
+					input.value = "";  // Setting the input box to ""
+				}
+			});  // Closes the function first, then the arguments
+		</script>
+	</body>
+</html>
