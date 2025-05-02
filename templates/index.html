@@ -27,6 +27,29 @@
 			const input = document.getElementById("todo-input");
 			const list = document.getElementById("todo-list");
 
+			function saveToLS() {		// Function to save the list to local storage using JSON stringify
+				const tasks = [];
+				const listItems = list.querySelectorAll("li");
+				listItems.forEach((item) => {
+					const taskText = item.querySelector("span").textContent;
+					tasks.push(taskText);
+				})
+				localStorage.setItem("tasks", JSON.stringify(tasks));
+			}
+
+			function loadFromLS() {
+				try {
+				const tasks = JSON.parse(localStorage.getItem("Tasks"));
+				if (tasks) {
+					tasks.forEach((task) => {
+
+					})
+				}
+				} catch (error) {
+					console.error("Error loading tasks from local storage:", error);
+				}
+			}
+
 			form.addEventListener("submit", function (event) {
 				event.preventDefault();
 				const task = input.value.trim();  // Trims off the extra spaces from the user's input and stores it within the constant "task"
