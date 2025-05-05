@@ -12,8 +12,19 @@
 
 		<div id="todo-container">
 			<form id="todo-form">
+				<!--This does not work yet-->
+				<button type="load" onclick="loadFromLS()">Load
+				</button>
+				<!--This does not work yet-->
+				<button type="save" onclick="saveToLS()">Save
+				</button>
+				<!--This does not work yet-->
+				<button type="clear" onclick="localStorage.clear()">Clear
+				</button>
+
 				<input type="text" id="todo-input" placeholder="Enter a task..." required>
 				</input>
+
 				<button type="submit">Add
 				</button>
 			</form>
@@ -29,49 +40,53 @@
 
 			function saveToLS() {		// Function to save the list to local storage using JSON stringify
 				const tasks = [];
-				const listItems = list.querySelectorAll("li");
-				listItems.forEach((item) => {
-					const taskText = item.querySelector("span").textContent;
-					tasks.push(taskText);
-				})
+				document.querySelectorAll("#todo-list li span").forEach(span => {
+					tasks.push(span.textContent);
+				});
 				localStorage.setItem("tasks", JSON.stringify(tasks));
 			}
 
 			function loadFromLS() {
-				try {
-				const tasks = JSON.parse(localStorage.getItem("Tasks"));
-				if (tasks) {
-					tasks.forEach((task) => {
-
-					})
-				}
+				const saved = localStorage.getItem("tasks");
+				if (saved) {
+					try {
+						const tasks = JSON.parse(saved);
+						tasks.forEach(task => {
+							addTaskToDom(task);
+						});
 				} catch (error) {
-					console.error("Error loading tasks from local storage:", error);
+						console.error("Error parsing tasks from localStorage:", error);
+					}
 				}
+			}
+
+			function addTaskToDom(task) {
+				const li = document.createElement("li");
+				const span = document.createElement("span");
+				span.textContent = task;
+				li.appendChild(span);
+
+				const deleteBtn = document.createElement("button");
+				deleteBtn.textContent = "Delete";
+				deleteBtn.onclick = () => {
+					list.removeChild(li);
+					saveToLS();
+				};
+
+				li.appendChild(span);
+				li.appendChild(deleteBtn);
+				list.appendChild(li);
 			}
 
 			form.addEventListener("submit", function (event) {
 				event.preventDefault();
 				const task = input.value.trim();  // Trims off the extra spaces from the user's input and stores it within the constant "task"
 				if (task !== "") {
-					const li = document.createElement("li");  // Creates a new list item from the website's document
-					const span = document.createElement("span");  // Create new constant "span" to delete contents without deleteing "li" or "deleteBtn"
-					span.textContent = task;  // Sets "span" to the contents of "task"
-// Delete Button <
-					const deleteBtn = document.createElement("button");  // Creates new constant delete button variable
-					deleteBtn.textContent = "Delete";  // Sets the content of the button to "Delete" for display
-					deleteBtn.onclick = () => {  // Function to delete list item (li) from list
-						list.removeChild(li);
-					};
-
-					li.textContent = task;  // Assigning new list item to trimmed input "task"
-					li.appendChild(span);  // Adds span to the end of li
-					li.appendChild(deleteBtn);  // Adds deleteBtn to the end of li
-					list.appendChild(li);  // Adds "li" to the end of "list" (First In, First Out)
-// Delete Button >
+					addTaskToDom(task);
 					input.value = "";  // Setting the input box to ""
+					saveToLS();
 				}
-			});  // Closes the function first, then the arguments
+			});
 		</script>
 	</body>
 </html>
