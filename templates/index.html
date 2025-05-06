@@ -5,6 +5,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>My To-Do List Two
 		</title>
+	<style>
+
+	</style>
 	</head>
 
 	<body>
@@ -12,24 +15,18 @@
 
 		<div id="todo-container">
 			<form id="todo-form">
-				<!--This does not work yet-->
-				<button type="load" onclick="loadFromLS()">Load
-				</button>
-				<!--This does not work yet-->
-				<button type="save" onclick="saveToLS()">Save
-				</button>
-				<!--This does not work yet-->
-				<button type="clear" onclick="localStorage.clear()">Clear
-				</button>
+					<div class="controls">
+						<label for="todo-input">To-Do List</label>
+					<button type="load" onclick="loadFromLS()">Load </button>
+					<button type="save" onclick="saveToLS()">Save </button>
+					<button type="clear" onclick="clearAll()">Clear List </button>
 
-				<input type="text" id="todo-input" placeholder="Enter a task..." required>
-				</input>
+					</div>
+				<input type="text" id="todo-input" placeholder="Enter a task..." required> </input>
 
-				<button type="submit">Add
-				</button>
+				<button type="submit">Add </button>
 			</form>
-			<ul id="todo-list">
-			</ul>
+			<ul id="todo-list"> </ul>
 		</div>
 
 		<script>
@@ -38,15 +35,21 @@
 			const input = document.getElementById("todo-input");
 			const list = document.getElementById("todo-list");
 
+			window.onload = function () {
+				loadFromLS();
+			};
+
 			function saveToLS() {		// Function to save the list to local storage using JSON stringify
 				const tasks = [];
 				document.querySelectorAll("#todo-list li span").forEach(span => {
 					tasks.push(span.textContent);
 				});
-				localStorage.setItem("tasks", JSON.stringify(tasks));
+				localStorage.setItem("tasks", JSON.stringify(tasks));	// I like to call this "J's Son's Cookies"
 			}
 
 			function loadFromLS() {
+				list.innerHTML = "";  // Clear the list before loading
+
 				const saved = localStorage.getItem("tasks");
 				if (saved) {
 					try {
@@ -68,6 +71,7 @@
 
 				const deleteBtn = document.createElement("button");
 				deleteBtn.textContent = "Delete";
+				
 				deleteBtn.onclick = () => {
 					list.removeChild(li);
 					saveToLS();
@@ -76,6 +80,11 @@
 				li.appendChild(span);
 				li.appendChild(deleteBtn);
 				list.appendChild(li);
+			}
+
+			function clearAll() {
+				localStorage.clear();
+				list.innerHTML = "";
 			}
 
 			form.addEventListener("submit", function (event) {

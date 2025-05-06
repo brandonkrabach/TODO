@@ -9,9 +9,14 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route('/TODO')
+def TODO():
+    return render_template('TODO.html')
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    host = os.environ.get("HOST", "0.0.0.0")
+    app.run(host=host, port=port, debug=True)
 
 # Finish Application code
 # Persist in browser (javascript)
