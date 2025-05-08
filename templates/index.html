@@ -67,6 +67,8 @@
 				<button type="submit">Add </button>
 				</div>
 				<button type="clear" onclick="clearAll()">Clear List </button>
+				<button type="load" onclick="loadFromS()">Load</button>
+				<button type="save" onclick="saveToS()">Save</button>
 			</form>
 			<ul id="todo-list"> </ul>
 		</div>
@@ -81,6 +83,36 @@
 			window.onload = function () {
 				loadFromLS();
 			};
+
+			// ---------------------- Functions for saving and loading tasks to server ------------------
+
+			function saveToServer() {
+				const tasks = [];
+				document.querySelectorAll('#todo-list li span').forEach(span => {
+					tasks.push(span.textContent);
+				});
+
+				fetch("/save", {
+					method: "POST",
+					headers: {"content-type" : "application/json"},
+					body: JSON.stringify({ tasks })
+				});
+				saveToLS();
+			}
+
+			function loadFromS() {
+				fetch("/load")
+					.then(res => res.json())
+					.then(data => {
+						if (data.tasks) {
+							list.innerHTML = "";
+							data.tasks.forEach(task => addTaskToDom(task));
+							localStorage.setItem("tasks", JSON.stringify(data.tasks));
+						}
+					});
+			}
+
+			// ---------------------- Functions for saving and loading tasks to server ------------------
 
 			function saveToLS() {		// Function to save the list to local storage using JSON stringify
 				const tasks = [];
