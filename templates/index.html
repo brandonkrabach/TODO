@@ -90,7 +90,7 @@
 				let userid = localStorage.getItem("user_id");
 				if(!userid) {
 					user_id = "user_" + Math.random().toString(36).substring(2, 9);
-					localStorange.setItem("user_id", user_id);
+					localStorage.setItem("user_id", user_id);
 				}
 				return user_id;
 			}
@@ -107,7 +107,7 @@
 					method: "POST",
 					headers: {"content-type" : "application/json"},
 					body: JSON.stringify({
-						userId: getUserId(),
+						user_id: getUserId(),
 						tasks: tasks
 					})
 				});
@@ -116,7 +116,7 @@
 			}
 
 			function loadFromS() {
-				fetch('/load?user_id=${encodeURIComponent(getUserId())}')
+				fetch(`/load?user_id=${encodeURIComponent(getUserId())}`)
 					.then(res => res.json())
 					.then(data => {
 						if (data.tasks) {

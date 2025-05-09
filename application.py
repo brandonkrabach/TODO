@@ -45,13 +45,13 @@ def save():
 
     return jsonify(status="saved")
 
-@app.route('/load', methods=['POST'])
+@app.route('/load', methods=['GET'])
 def load():
     user_id = request.args.get("user_id")
     if not user_id:
         return jsonify(tasks=[])
     
-    user_data = load
+    user_data = load_user_data()
     tasks = user_data.get(user_id, [])
     return jsonify(tasks=tasks)
 
