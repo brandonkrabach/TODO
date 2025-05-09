@@ -84,9 +84,20 @@
 				loadFromLS();
 			};
 
-			// ---------------------- Functions for saving and loading tasks to server ------------------
+			// ---------------------- Functions for getting user information ------------------ //
 
-			function saveToServer() {
+			function getUserId() {
+				let userid = localStorage.getItem("user_id");
+				if(!userid) {
+					user_id = "user_" + Math.random().toString(36).substring(2, 9);
+					localStorange.setItem("user_id", user_id);
+				}
+				return user_id;
+			}
+
+			// ---------------------- Functions for saving and loading tasks to server ------------------ //
+
+			function saveToS() {
 				const tasks = [];
 				document.querySelectorAll('#todo-list li span').forEach(span => {
 					tasks.push(span.textContent);
@@ -95,13 +106,17 @@
 				fetch("/save", {
 					method: "POST",
 					headers: {"content-type" : "application/json"},
-					body: JSON.stringify({ tasks })
+					body: JSON.stringify({
+						userId: getUserId(),
+						tasks: tasks
+					})
 				});
+
 				saveToLS();
 			}
 
 			function loadFromS() {
-				fetch("/load")
+				fetch('/load?user_id=${encodeURIComponent(getUserId())}')
 					.then(res => res.json())
 					.then(data => {
 						if (data.tasks) {
@@ -112,7 +127,7 @@
 					});
 			}
 
-			// ---------------------- Functions for saving and loading tasks to server ------------------
+			// ---------------------- Functions for saving and loading tasks to server ------------------ //
 
 			function saveToLS() {		// Function to save the list to local storage using JSON stringify
 				const tasks = [];
